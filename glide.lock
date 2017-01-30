@@ -1,0 +1,32 @@
+hash: 777834519f8ff3c99da10863a657a4b67c413260958a9c5d41f9accb40bc694f
+updated: 2017-01-31T00:06:46.228873506+01:00
+imports:
+- name: github.com/djherbis/times
+  version: 95292e44976d1217cf3611dc7c8d9466877d3ed5
+- name: github.com/fatih/color
+  version: 34e4ee095d12986a2cef5ddb9aeb3b8cfcfea17c
+- name: github.com/go-sql-driver/mysql
+  version: 2e00b5cd70399450106cec6431c2e2ce3cae5034
+- name: github.com/gorilla/context
+  version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
+- name: github.com/gorilla/mux
+  version: 392c28fe23e1c45ddba891b0320b3b5df220beea
+- name: github.com/jinzhu/gorm
+  version: 5174cc5c242a728b435ea2be8a2f7f998e15429b
+  subpackages:
+  - dialects/mysql
+- name: github.com/jinzhu/inflection
+  version: 1c35d901db3da928c72a72d8458480cc9ade058f
+- name: github.com/mattn/go-colorable
+  version: d228849504861217f796da67fae4f6e347643f15
+- name: github.com/mattn/go-isatty
+  version: 30a891c33c7cde7b02a981314b4228ec99380cca
+- name: github.com/radovskyb/watcher
+  version: 1925df70dcfd7eeb5085fc45c40f1e53759f5e3f
+- name: github.com/satori/go.uuid
+  version: 879c5887cd475cd7864858769793b2ceb0d44feb
+- name: golang.org/x/sys
+  version: d75a52659825e75fff6158388dddc6a5b04f9ba5
+  subpackages:
+  - unix
+testImports: []

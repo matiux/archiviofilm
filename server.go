@@ -42,8 +42,9 @@ func FilmUpdateEndPoint(w http.ResponseWriter, req *http.Request) {
 func main() {
 
 	router := mux.NewRouter().StrictSlash(true)
-	router.Host("localhost:8080")
-	router.HandleFunc("/films", FilmListEndPoint).Methods("GET")
-	router.HandleFunc("/films/{film}", FilmUpdateEndPoint).Methods("PATCH")
+	s := router.PathPrefix("/api/v1").Subrouter()
+	s.Host("localhost:8080")
+	s.HandleFunc("/films", FilmListEndPoint).Methods("GET")
+	s.HandleFunc("/films/{film}", FilmUpdateEndPoint).Methods("PATCH")
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

@@ -29,6 +29,21 @@ func (filmRepo *FilmRepository) CloseDbConnection() {
 	filmRepo.db.Close()
 }
 
+func (filmRepo *FilmRepository) FindFilmById(filmId string) (*Film, bool) {
+
+	exists := false
+
+	film := new(Film)
+
+	filmRepo.db.Where(&Film{Id: filmId}).First(&film)
+
+	if film.Id != "" {
+		exists = true
+	}
+
+	return film, exists
+}
+
 func (filmRepo *FilmRepository) FindFilmByName(fileName string) (*Film, bool) {
 	//, error
 	// if 0 == 0 {

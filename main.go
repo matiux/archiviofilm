@@ -25,6 +25,7 @@ func main() {
 
 	CreateFilm := service.NewCreateFilm()
 	DeleteFilm := service.NewDeleteFilm()
+	RenameFilm := service.NewRenameFilm()
 
 	go func() {
 
@@ -36,18 +37,6 @@ func main() {
 				// Print the event's info.
 				//fmt.Println(event)
 
-				// fileType := func() string {
-				// 	if event.IsDir() {
-				// 		return "Directory"
-				// 	} else {
-				// 		return "File"
-				// 	}
-				// }
-
-				// fmt.Println(fileType())
-
-				// Print out the file name with a message based on the event type.
-
 				if !event.IsDir() {
 
 					switch event.Op {
@@ -55,6 +44,13 @@ func main() {
 					case watcher.Write:
 						fmt.Printf("Event: WRITE")
 						CreateFilm.CreateOrUpdateFilm(event.Path)
+					case watcher.Move:
+						fmt.Println("Event: MOVE")
+						splitPath := strings.Split(event.Path, " -> ")
+						oldPath := splitPath[0]
+						newPath := splitPath[1]
+						fmt.Printf("%v -> %v\n", oldPath, newPath)
+						RenameFilm.Execute(oldPath, newPath)
 					case watcher.Create:
 						fmt.Printf("Event: CREATE")
 						CreateFilm.CreateOrUpdateFilm(event.Path)
@@ -62,20 +58,20 @@ func main() {
 						fmt.Printf("Event: REMOVE")
 						DeleteFilm.DeleteFilmIfExists(event.Path)
 					case watcher.Rename:
-						fmt.Printf("Event: RENAME")
+						fmt.Println("Event: RENAME")
 						splitPath := strings.Split(event.Path, " -> ")
 						oldPath := splitPath[0]
 						newPath := splitPath[1]
+						fmt.Printf("%v -> %v\n", oldPath, newPath)
 
-						if film := DeleteFilm.DeleteFilmIfExists(oldPath); film != nil {
+						RenameFilm.Execute(oldPath, newPath)
 
-							CreateFilm.CopyFilm(newPath, film)
-						}
+						// if film := DeleteFilm.DeleteFilmIfExists(oldPath); film != nil {
 
+						// 	CreateFilm.FromExist(film, newPath)
+						// }
 					case watcher.Chmod:
 						fmt.Printf("Event: CHMODED")
-						// s := fmt.Sprintf("Chmoded %v: %v", fileType(), event.Path)
-						// fmt.Println(s)
 					}
 				}
 
@@ -86,7 +82,7 @@ func main() {
 	}()
 
 	// Watch test_folder recursively for changes.
-	if err := w.Add("/home/iux/Desktop/GoSyncTest"); err != nil {
+	if err := w.AddRecursive("/home/iux/Desktop/GoSyncTest"); err != nil {
 		log.Fatalln(err)
 	}
 

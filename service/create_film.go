@@ -44,7 +44,7 @@ func (c *CreateFilm) CreateOrUpdateFilm(path string) {
 	}
 }
 
-func (c *CreateFilm) CopyFilm(newFile string, oldFile *model.Film) {
+func (c *CreateFilm) FromExist(newFile string, oldFile *model.Film) {
 
 	green := color.New(color.FgGreen)
 	// yellow := color.New(color.FgYellow).Add(color.Underline)

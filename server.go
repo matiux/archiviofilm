@@ -11,6 +11,10 @@ import (
 	"net/http"
 )
 
+type RequestFilm struct {
+	Seen bool
+}
+
 func FilmListEndPoint(w http.ResponseWriter, req *http.Request) {
 
 	films := service.NewListFilm().Execute()
@@ -34,9 +38,33 @@ func FilmListEndPoint(w http.ResponseWriter, req *http.Request) {
 
 func FilmUpdateEndPoint(w http.ResponseWriter, req *http.Request) {
 
-	params := mux.Vars(req)
+	needs := []string{"Seen"}
 
-	fmt.Println(params)
+	service.DecodeAndValidate(req, needs)
+
+	//UpdateFilm := service.NewUpdateFilm()
+
+	//w.Header().Set("Content-Type", "application/json")
+
+	// var requestFilm RequestFilm
+
+	// params := mux.Vars(req)
+
+	//fmt.Println(mux.Vars(req)["film"])
+
+	// if req.Body == nil {
+	// 	http.Error(w, "Please send a request body", 400)
+	// 	return
+	// }
+
+	// err := json.NewDecoder(req.Body).Decode(&requestFilm)
+
+	// if err != nil {
+	// 	http.Error(w, "Decode error: "+err.Error(), 400)
+	// 	return
+	// }
+	//fmt.Println(req.Body)
+	// fmt.Println(requestFilm.Seen)
 }
 
 func main() {
@@ -46,5 +74,6 @@ func main() {
 	s.Host("localhost:8080")
 	s.HandleFunc("/films", FilmListEndPoint).Methods("GET")
 	s.HandleFunc("/films/{film}", FilmUpdateEndPoint).Methods("PATCH")
+	fmt.Println("localhost:8080 is listening")
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

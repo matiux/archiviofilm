@@ -6,14 +6,11 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"html"
-	// "io"
 	"log"
 	"net/http"
 )
 
-type RequestFilm struct {
-	Seen bool
-}
+var ResponseMessage = make(map[string]string)
 
 func FilmListEndPoint(w http.ResponseWriter, req *http.Request) {
 
@@ -25,46 +22,33 @@ func FilmListEndPoint(w http.ResponseWriter, req *http.Request) {
 		panic(err)
 	}
 
-	//serialized, _ := json.Marshal(films)
-
-	// io.WriteString(w, string(res2B))
-
-	//io.WriteString(w, string(serialized))
-
-	//fmt.Fprintf(w, "Hello, %q", html.EscapeString(req.URL.Path))
-
 	fmt.Printf("Endpoint Hit: %v [FilmListEndPoint()]\n", html.EscapeString(req.URL.Path))
 }
 
 func FilmUpdateEndPoint(w http.ResponseWriter, req *http.Request) {
 
+	w.Header().Set("Content-Type", "application/json")
+
 	needs := []string{"Seen"}
 
-	service.DecodeAndValidate(req, needs)
+	if validated, err := service.DecodeAndValidate(req, needs); err != nil {
 
-	//UpdateFilm := service.NewUpdateFilm()
+		ResponseMessage["status"] = err.Error()
 
-	//w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(ResponseMessage)
 
-	// var requestFilm RequestFilm
+	} else {
 
-	// params := mux.Vars(req)
+		UpdateFilm := service.NewUpdateFilm()
+		film := UpdateFilm.UpdateSeen(mux.Vars(req)["film"], validated.Seen)
 
-	//fmt.Println(mux.Vars(req)["film"])
+		if film != nil {
 
-	// if req.Body == nil {
-	// 	http.Error(w, "Please send a request body", 400)
-	// 	return
-	// }
-
-	// err := json.NewDecoder(req.Body).Decode(&requestFilm)
-
-	// if err != nil {
-	// 	http.Error(w, "Decode error: "+err.Error(), 400)
-	// 	return
-	// }
-	//fmt.Println(req.Body)
-	// fmt.Println(requestFilm.Seen)
+			//ResponseMessage["status"] = "updated"
+			json.NewEncoder(w).Encode(film)
+		}
+	}
 }
 
 func main() {

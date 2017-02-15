@@ -19,12 +19,20 @@ func NewUpdateFilm() *UpdateFilm {
 	return &updateFilm
 }
 
-func (u *UpdateFilm) updateSeen(filmId string, seen bool) {
+func (u *UpdateFilm) UpdateSeen(filmId string, seen bool) *model.Film {
 
 	red := color.New(color.FgRed)
 	green := color.New(color.FgGreen)
 
 	if film, exists := u.FilmRepository.FindFilmById(filmId); exists {
+
+		// if film.Seen == true {
+
+		// 	film.Seen = false
+		// } else {
+
+		// 	film.Seen = true
+		// }
 
 		film.Seen = seen
 		film.UpdatedAt = time.Now()
@@ -33,8 +41,12 @@ func (u *UpdateFilm) updateSeen(filmId string, seen bool) {
 
 		green.Printf("Film aggiornato [Seen]\n")
 
+		return film
+
 	} else {
 
 		red.Printf("Film non esistente: %v\n", filmId)
+
+		return nil
 	}
 }

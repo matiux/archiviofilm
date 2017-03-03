@@ -5,12 +5,15 @@ import (
 	"fmt"
 	"github.com/radovskyb/watcher"
 	"log"
+	"os/user"
 	"strings"
 	"sync"
 	"time"
 )
 
 func main() {
+
+	const Debug = false
 
 	w := watcher.New()
 
@@ -42,36 +45,44 @@ func main() {
 					switch event.Op {
 
 					case watcher.Write:
-						fmt.Printf("Event: WRITE")
-						CreateFilm.CreateOrUpdateFilm(event.Path)
+						fmt.Println("Event: WRITE [" + event.Path + "]")
+						if !Debug {
+							CreateFilm.CreateOrUpdateFilm(event.Path)
+						}
 					case watcher.Move:
 						fmt.Println("Event: MOVE")
 						splitPath := strings.Split(event.Path, " -> ")
 						oldPath := splitPath[0]
 						newPath := splitPath[1]
 						fmt.Printf("%v -> %v\n", oldPath, newPath)
-						RenameFilm.Execute(oldPath, newPath)
+						if !Debug {
+							RenameFilm.Execute(oldPath, newPath)
+						}
 					case watcher.Create:
-						fmt.Printf("Event: CREATE")
-						CreateFilm.CreateOrUpdateFilm(event.Path)
+						fmt.Println("Event: CREATE [" + event.Path + "]")
+						if !Debug {
+							CreateFilm.CreateOrUpdateFilm(event.Path)
+						}
 					case watcher.Remove:
-						fmt.Printf("Event: REMOVE")
-						DeleteFilm.DeleteFilmIfExists(event.Path)
+						fmt.Println("Event: REMOVE [" + event.Path + "]")
+						if !Debug {
+							DeleteFilm.DeleteFilmIfExists(event.Path)
+						}
 					case watcher.Rename:
 						fmt.Println("Event: RENAME")
 						splitPath := strings.Split(event.Path, " -> ")
 						oldPath := splitPath[0]
 						newPath := splitPath[1]
 						fmt.Printf("%v -> %v\n", oldPath, newPath)
-
-						RenameFilm.Execute(oldPath, newPath)
-
+						if !Debug {
+							RenameFilm.Execute(oldPath, newPath)
+						}
 						// if film := DeleteFilm.DeleteFilmIfExists(oldPath); film != nil {
 
 						// 	CreateFilm.FromExist(film, newPath)
 						// }
 					case watcher.Chmod:
-						fmt.Printf("Event: CHMODED")
+						fmt.Println("Event: CHMODED [" + event.Path + "]")
 					}
 				}
 
@@ -81,8 +92,14 @@ func main() {
 		}
 	}()
 
+	usr, err := user.Current()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// Watch test_folder recursively for changes.
-	if err := w.AddRecursive("/home/iux/Desktop/GoSyncTest"); err != nil {
+	if err := w.AddRecursive("/home/" + usr.Username + "/Desktop/GoSyncTest"); err != nil {
 		log.Fatalln(err)
 	}
 

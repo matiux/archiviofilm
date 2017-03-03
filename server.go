@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
-	"html"
+	// "html"
 	"log"
 	"net/http"
 )
@@ -14,15 +14,23 @@ var ResponseMessage = make(map[string]string)
 
 func FilmListEndPoint(w http.ResponseWriter, req *http.Request) {
 
-	films := service.NewListFilm().Execute()
+	filters := req.URL.Query()
 
-	w.Header().Set("Content-Type", "application/json")
+	// for k, v := range filters {
+	// 	fmt.Printf("k: %v (%T) - v: %v (%T)\n", k, k, v, v)
+	// }
 
-	if err := json.NewEncoder(w).Encode(films); err != nil {
-		panic(err)
-	}
+	fmt.Printf("%v, %T", filters, filters)
 
-	fmt.Printf("Endpoint Hit: %v [FilmListEndPoint()]\n", html.EscapeString(req.URL.Path))
+	// films := service.NewListFilm().Execute(filters)
+
+	// w.Header().Set("Content-Type", "application/json")
+
+	// if err := json.NewEncoder(w).Encode(films); err != nil {
+	// 	panic(err)
+	// }
+
+	// fmt.Printf("Endpoint Hit: %v [FilmListEndPoint()]\n", html.EscapeString(req.URL.Path))
 }
 
 func FilmUpdateEndPoint(w http.ResponseWriter, req *http.Request) {
@@ -56,8 +64,10 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	s := router.PathPrefix("/api/v1").Subrouter()
 	s.Host("localhost:8080")
-	s.HandleFunc("/films", FilmListEndPoint).Methods("GET")
-	s.HandleFunc("/films/{film}", FilmUpdateEndPoint).Methods("PATCH")
+	s.HandleFunc("/film", FilmListEndPoint).Methods("GET")
+	s.HandleFunc("/film/{film}", FilmUpdateEndPoint).Methods("PATCH")
+
 	fmt.Println("localhost:8080 is listening")
+
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

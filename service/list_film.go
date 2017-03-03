@@ -2,7 +2,8 @@ package service
 
 import (
 	"bitbucket.org/matiux/archiviofilm/model"
-	// "fmt"
+	"fmt"
+	"net/url"
 )
 
 type ListFilm struct {
@@ -18,7 +19,9 @@ func NewListFilm() *ListFilm {
 	return &listFilm
 }
 
-func (lf *ListFilm) Execute() []model.Film {
+func (lf *ListFilm) Execute(filters url.Values) []model.Film {
+
+	fmt.Printf("list_film.go - Filters: %v\nType: %T\n\n", filters, filters)
 
 	films := lf.FilmRepository.All()
 

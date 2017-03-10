@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
-	// "html"
+	"html"
 	"log"
 	"net/http"
 )
@@ -14,23 +14,21 @@ var ResponseMessage = make(map[string]string)
 
 func FilmListEndPoint(w http.ResponseWriter, req *http.Request) {
 
-	filters := req.URL.Query()
+	filters := req.URL.Query().Get("filters")
+	sort := req.URL.Query().Get("sort")
 
-	// for k, v := range filters {
-	// 	fmt.Printf("k: %v (%T) - v: %v (%T)\n", k, k, v, v)
-	// }
+	// fmt.Printf("%v, %T\n", filters, filters)
+	// fmt.Printf("%v, %T\n", sort, sort)
 
-	fmt.Printf("%v, %T", filters, filters)
+	films := service.NewListFilm().Execute(filters, sort)
 
-	// films := service.NewListFilm().Execute(filters)
+	w.Header().Set("Content-Type", "application/json")
 
-	// w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(films); err != nil {
+		panic(err)
+	}
 
-	// if err := json.NewEncoder(w).Encode(films); err != nil {
-	// 	panic(err)
-	// }
-
-	// fmt.Printf("Endpoint Hit: %v [FilmListEndPoint()]\n", html.EscapeString(req.URL.Path))
+	fmt.Printf("Endpoint Hit: %v [FilmListEndPoint()]\n", html.EscapeString(req.URL.Path))
 }
 
 func FilmUpdateEndPoint(w http.ResponseWriter, req *http.Request) {

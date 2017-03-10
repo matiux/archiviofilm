@@ -75,11 +75,20 @@ func (filmRepo *FilmRepository) CreateFilm(film Film) Film {
 // func UpdateFilm(film Film, name string) (Film, error) {
 // }
 
-func (filmRepo *FilmRepository) All() []Film {
+func (filmRepo *FilmRepository) All(filters []string, sort string) []Film {
+
+	fmt.Printf("filters: %v\nSort: %v\n\n", filters, sort)
 
 	var films []Film
 
-	if filmRepo.db.Find(&films).Error != nil {
+	query := filmRepo.db.Order("File " + sort)
+
+	for _, element := range filters {
+
+		query = query.Where("file LIKE ?", "%"+element+"%")
+	}
+
+	if query.Find(&films).Error != nil {
 
 		//...
 	}

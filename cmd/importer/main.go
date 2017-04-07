@@ -1,11 +1,12 @@
 package main
 
 import (
-	"bitbucket.org/matiux/archiviofilm/service"
 	"fmt"
-	"github.com/fatih/color"
 	"os"
 	"path/filepath"
+
+	"bitbucket.org/matiux/archiviofilm/service"
+	"github.com/fatih/color"
 )
 
 func main() {

@@ -1,8 +1,9 @@
 package main
 
 import (
-	"bitbucket.org/matiux/archiviofilm/model"
 	"fmt"
+
+	"bitbucket.org/matiux/archiviofilm/model"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
@@ -12,7 +13,6 @@ func main() {
 	db, err := gorm.Open("mysql", "root:281285@/archivio_film?charset=utf8&parseTime=True&loc=Local")
 
 	if err != nil {
-
 		fmt.Println("Errore DB" + err.Error())
 	}
 

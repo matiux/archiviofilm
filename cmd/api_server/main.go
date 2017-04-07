@@ -1,18 +1,19 @@
 package main
 
 import (
-	"bitbucket.org/matiux/archiviofilm/service"
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/mux"
 	"html"
 	"log"
 	"net/http"
+
+	"bitbucket.org/matiux/archiviofilm/service"
+	"github.com/gorilla/mux"
 )
 
-var ResponseMessage = make(map[string]string)
+var responseMessage = make(map[string]string)
 
-func FilmListEndPoint(w http.ResponseWriter, req *http.Request) {
+func filmListEndPoint(w http.ResponseWriter, req *http.Request) {
 
 	filters := req.URL.Query().Get("filters")
 	sort := req.URL.Query().Get("sort")
@@ -31,7 +32,7 @@ func FilmListEndPoint(w http.ResponseWriter, req *http.Request) {
 	fmt.Printf("Endpoint Hit: %v [FilmListEndPoint()]\n", html.EscapeString(req.URL.Path))
 }
 
-func FilmUpdateEndPoint(w http.ResponseWriter, req *http.Request) {
+func filmUpdateEndPoint(w http.ResponseWriter, req *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 
@@ -39,10 +40,10 @@ func FilmUpdateEndPoint(w http.ResponseWriter, req *http.Request) {
 
 	if validated, err := service.DecodeAndValidate(req, needs); err != nil {
 
-		ResponseMessage["status"] = err.Error()
+		responseMessage["status"] = err.Error()
 
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(ResponseMessage)
+		json.NewEncoder(w).Encode(responseMessage)
 
 	} else {
 
@@ -62,8 +63,8 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	s := router.PathPrefix("/api/v1").Subrouter()
 	s.Host("localhost:8080")
-	s.HandleFunc("/film", FilmListEndPoint).Methods("GET")
-	s.HandleFunc("/film/{film}", FilmUpdateEndPoint).Methods("PATCH")
+	s.HandleFunc("/film", filmListEndPoint).Methods("GET")
+	s.HandleFunc("/film/{film}", filmUpdateEndPoint).Methods("PATCH")
 
 	fmt.Println("localhost:8080 is listening")
 

@@ -1,18 +1,24 @@
 package main
 
 import (
-	"bitbucket.org/matiux/archiviofilm/service"
 	"fmt"
-	"github.com/radovskyb/watcher"
 	"log"
-	"os/user"
 	"strings"
 	"sync"
 	"time"
+
+	"bitbucket.org/matiux/archiviofilm/service"
+	"github.com/radovskyb/watcher"
 )
 
 func main() {
 
+	// usr, err := user.Current()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	const Path = "/mnt/storaMioArchivio/MieiVideo/Film/"
+	//const Path = "/home/" + usr.Username + "/Desktop/GoSyncTest"
 	const Debug = false
 
 	w := watcher.New()
@@ -92,14 +98,8 @@ func main() {
 		}
 	}()
 
-	usr, err := user.Current()
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	// Watch test_folder recursively for changes.
-	if err := w.AddRecursive("/home/" + usr.Username + "/Desktop/GoSyncTest"); err != nil {
+	if err := w.AddRecursive(Path); err != nil {
 		log.Fatalln(err)
 	}
 

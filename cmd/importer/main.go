@@ -11,9 +11,28 @@ import (
 
 func main() {
 
-	yellow := color.New(color.FgYellow).Add(color.Underline)
+	var searchDir string
 
-	searchDir := "/mnt/storaMioArchivio/MieiVideo/Film/"
+	if 1 < len(os.Args) {
+
+		searchDir = os.Args[1]
+
+		if _, err := os.Stat(searchDir); err != nil {
+
+			if os.IsNotExist(err) {
+				fmt.Println("'" + searchDir + "' doesn't exist")
+				os.Exit(1)
+			} else {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+		}
+	} else {
+
+		searchDir = "/mnt/storaMioArchivio/MieiVideo/Film/"
+	}
+
+	yellow := color.New(color.FgYellow).Add(color.Underline)
 
 	CreateFilm := service.NewCreateFilm()
 

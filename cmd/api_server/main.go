@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"bitbucket.org/matiux/archiviofilm/service"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
@@ -65,6 +66,8 @@ func main() {
 	s.Host("localhost:8080")
 	s.HandleFunc("/film", filmListEndPoint).Methods("GET")
 	s.HandleFunc("/film/{film}", filmUpdateEndPoint).Methods("PATCH")
+
+	http.ListenAndServe(":8080", handlers.CORS()(router))
 
 	fmt.Println("localhost:8080 is listening")
 

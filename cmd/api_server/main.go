@@ -8,8 +8,8 @@ import (
 	"net/http"
 
 	"bitbucket.org/matiux/archiviofilm/service"
-	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 )
 
 var responseMessage = make(map[string]string)
@@ -67,9 +67,14 @@ func main() {
 	s.HandleFunc("/film", filmListEndPoint).Methods("GET")
 	s.HandleFunc("/film/{film}", filmUpdateEndPoint).Methods("PATCH")
 
-	http.ListenAndServe(":8080", handlers.CORS()(router))
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"OPTIONS", "GET", "PATCH"},
+	})
+
+	handler := c.Handler(s)
+
+	log.Fatal(http.ListenAndServe(":8080", handler))
 
 	fmt.Println("localhost:8080 is listening")
-
-	log.Fatal(http.ListenAndServe(":8080", router))
 }

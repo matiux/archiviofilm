@@ -204,9 +204,9 @@ class FilmSeenStatusToggle extends Component {
    render() {
 
       return (
-         <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
-            <Toggle onToggle={this.changeSeenStatus} defaultToggled={this.state.seen} />
-         </MuiThemeProvider>
+
+         <Toggle onToggle={this.changeSeenStatus} defaultToggled={this.state.seen} />
+
       );
    }
 }
@@ -216,7 +216,9 @@ class App extends Component {
    render() {
 
       return (
-         <FilmTree />
+         <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+            <FilmTree />
+         </MuiThemeProvider>
       );
    }
 }

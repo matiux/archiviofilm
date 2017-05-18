@@ -33,6 +33,39 @@ function foo(list, search) {
    return false;
 };
 
+decorators.Toggle = () => (<span />);
+decorators.Header = (props) => {
+
+   const style = props.style;
+   const iconType = props.node.children ? 'folder' : 'file-text';
+   const iconClass = `fa fa-${iconType}`;
+   const iconStyle = { marginRight: '5px' };
+
+   const film = {
+      seen: props.node.seen,
+      id: props.node.id,
+      path: props.node.path
+   };
+
+   //var styleBase = Object.clone(style.base)
+
+   //var s = props.node.children ? Object.assign(style.base, {backgroundColor: '#b3f442'}) : style.base;
+
+   return (
+      <div style={iconType === 'folder' ? props.style.baseTitle : props.style.base}>
+         <div style={style.title}>
+            <div style={styles.item}>
+               <i className={iconClass} style={iconStyle} />
+               {props.node.name}
+            </div>
+            {!props.node.children ? <FilmSeenStatusToggle film={film} /> : ''}
+         </div>
+      </div>
+   );
+};
+
+//decorators.Container = (props) => (<div><decorators.Toggle props={props} /><decorators.Header props={props} /></div>);
+
 class FilmTree extends Component {
 
    constructor(props) {
@@ -111,7 +144,6 @@ class FilmTree extends Component {
       if (this.state.cursor) {
 
          this.setState({ cursor: { active: false } })
-
       }
 
       //node.active = true;
@@ -153,31 +185,7 @@ class FilmTree extends Component {
    }
 }
 
-decorators.Header = (props) => {
 
-   const style = props.style;
-   const iconType = props.node.children ? 'folder' : 'file-text';
-   const iconClass = `fa fa-${iconType}`;
-   const iconStyle = { marginRight: '5px' };
-
-   const film = {
-      seen: props.node.seen,
-      id: props.node.id,
-      path: props.node.path
-   };
-
-   return (
-      <div style={style.base}>
-         <div style={style.title}>
-            <div style={styles.item}>
-               <i className={iconClass} style={iconStyle} />
-               {props.node.name}
-            </div>
-            {!props.node.children ? <FilmSeenStatusToggle film={film} /> : ''}
-         </div>
-      </div>
-   );
-};
 
 class FilmSeenStatusToggle extends Component {
 
@@ -205,7 +213,7 @@ class FilmSeenStatusToggle extends Component {
 
       return (
 
-         <Toggle onToggle={this.changeSeenStatus} defaultToggled={this.state.seen} />
+         <Toggle onToggle={this.changeSeenStatus} defaultToggled={this.state.seen} style={styles.toggle} />
 
       );
    }

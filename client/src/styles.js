@@ -15,6 +15,10 @@ export default {
    item: {
       float: 'left'
    },
+   toggle: {
+      width: 'auto',
+      float: 'right'
+   },
    treeStyle: {
       tree: {
          base: {
@@ -30,14 +34,16 @@ export default {
             base: {
                position: 'relative',
                borderWidth: '1px',
-               borderBottom: '1px black solid',
-               margin: '0px 0px 5px 0px'
+               border: '1px black solid',
+               margin: '5px 0px 5px 0px',
+               padding: '4px',
             },
             link: {
                cursor: 'pointer',
                position: 'relative',
                padding: '0px 5px',
-               display: 'block'
+               display: 'block',
+
             },
             activeLink: {
                background: '#31363F'
@@ -72,6 +78,13 @@ export default {
                   color: '#9DA5AB',
                   width: '100%'
                },
+               baseTitle: {
+                  display: 'inline-block',
+                  verticalAlign: 'top',
+                  color: '#9DA5AB',
+                  width: '100%',
+                  fontWeight: 'bold',
+               },
                connector: {
                   width: '2px',
                   height: '12px',
@@ -83,7 +96,8 @@ export default {
                },
                title: {
                   lineHeight: '24px',
-                  verticalAlign: 'middle'
+                  verticalAlign: 'middle',
+
                }
             },
             subtree: {

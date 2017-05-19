@@ -17,12 +17,14 @@ var responseMessage = make(map[string]string)
 func filmListEndPoint(w http.ResponseWriter, req *http.Request) {
 
 	filters := req.URL.Query().Get("filters")
+	unseen := req.URL.Query().Get("unseen")
 	sort := req.URL.Query().Get("sort")
 
-	// fmt.Printf("%v, %T\n", filters, filters)
-	// fmt.Printf("%v, %T\n", sort, sort)
+	//fmt.Printf("%v, %T\n", filters, filters)
+	//fmt.Printf("%v, %T\n", sort, sort)
+	//fmt.Printf("%v, %T\n", unseen, unseen)
 
-	films := service.NewListFilm().Execute(filters, sort)
+	films := service.NewListFilm().Execute(filters, unseen, sort)
 
 	w.Header().Set("Content-Type", "application/json")
 

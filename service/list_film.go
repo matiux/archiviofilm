@@ -19,11 +19,22 @@ func NewListFilm() *ListFilm {
 	return &listFilm
 }
 
-func (lf *ListFilm) Execute(filterLIst string, sort string) []model.Film {
+func (lf *ListFilm) Execute(filterLIst string, unseen string, sort string) []model.Film {
 
 	filters := strings.Split(filterLIst, ",")
 
-	films := lf.FilmRepository.All(filters, sort)
+	var unseenCheck bool
+
+	if "true" == unseen {
+
+		unseenCheck = true
+
+	} else {
+
+		unseenCheck = false
+	}
+
+	films := lf.FilmRepository.All(filters, unseenCheck, sort)
 
 	return films
 }

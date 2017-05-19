@@ -3,6 +3,7 @@ package model
 import (
 	//"errors"
 	"fmt"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
@@ -75,9 +76,9 @@ func (filmRepo *FilmRepository) CreateFilm(film Film) Film {
 // func UpdateFilm(film Film, name string) (Film, error) {
 // }
 
-func (filmRepo *FilmRepository) All(filters []string, sort string) []Film {
+func (filmRepo *FilmRepository) All(filters []string, unseenCheck bool, sort string) []Film {
 
-	fmt.Printf("filters: %v\nSort: %v\n\n", filters, sort)
+	fmt.Printf("Filters: %v\nSort: %v\nUnseenCheck: %v\n\n", filters, sort, unseenCheck)
 
 	var films []Film
 
@@ -86,6 +87,11 @@ func (filmRepo *FilmRepository) All(filters []string, sort string) []Film {
 	for _, element := range filters {
 
 		query = query.Where("file LIKE ?", "%"+element+"%")
+	}
+
+	if unseenCheck {
+
+		query = query.Where("seen = 0")
 	}
 
 	if query.Find(&films).Error != nil {

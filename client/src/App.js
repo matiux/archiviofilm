@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { Toggle } from 'material-ui'
+import { Toggle, Checkbox } from 'material-ui'
+// import Visibility from 'material-ui/svg-icons/action/visibility';
+// import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
 // import client, { updateFilm, fetchList } from "./client";
 import { updateFilm, fetchList } from "./client";
 import { Treebeard, decorators } from 'react-treebeard';
 import styles from './styles';
-
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 
 function foo(list, search) {
 
@@ -64,7 +63,7 @@ decorators.Header = (props) => {
    );
 };
 
-//decorators.Container = (props) => (<div><decorators.Toggle props={props} /><decorators.Header props={props} /></div>);
+decorators.Container = (props) => (<div><decorators.Toggle {...props} /><decorators.Header {...props} /></div>);
 
 class FilmTree extends Component {
 
@@ -74,12 +73,26 @@ class FilmTree extends Component {
 
       this.state = {
          films: {},
+         unseen: false,
       };
+   }
+
+   componentDidUpdate(prevProps, prevState) {
+
+      if (prevState.unseen !== this.state.unseen) {
+
+         this.fetchData()
+      }
    }
 
    componentDidMount() {
 
-      fetchList()
+      this.fetchData()
+   }
+
+   fetchData() {
+
+      fetchList(this.state.unseen)
 
          .then((response) => {
 
@@ -156,20 +169,44 @@ class FilmTree extends Component {
       this.setState({ cursor: node });
    };
 
+   toggleUnseen = (event) => {
+
+      const check = event.target.checked;
+
+      this.setState({ unseen: check });
+   }
+
    render() {
 
       return (
          <div>
-            <div style={styles.searchBox}>
-               <div className="input-group">
-                  <span className="input-group-addon">
-                     <i className="fa fa-search"></i>
-                  </span>
-                  <input type="text"
-                     className="form-control"
-                     placeholder="Search the tree..."
-                  //onKeyUp={this.onFilterMouseUp.bind(this)}
+            <div style={styles.filters}>
+               <div style={styles.searchBox}>
+                  <div className="input-group">
+                     <span className="input-group-addon">
+                        <i className="fa fa-search"></i>
+                     </span>
+                     <input type="text"
+                        className="form-control"
+                        placeholder="Search the tree..."
+                        //onKeyUp={this.onFilterMouseUp.bind(this)}
+                     />
+                  </div>
+               </div>
+               <div style={styles.unseenCheckBox}>
+
+                  <Checkbox
+                     onCheck={this.toggleUnseen}
+                     labelPosition="left"
+                     label="Unseen"
+                     style={styles.unseenCheck}
+                     defaultChecked={this.state.unseen}
+                  //labelStyle={{color: "black"}}
+                  //inputStyle={{color: "black"}}
+                  //checkedIcon={<Visibility />}
+                  //uncheckedIcon={<VisibilityOff />}
                   />
+
                </div>
             </div>
             <div style={styles.component}>
@@ -224,7 +261,7 @@ class App extends Component {
    render() {
 
       return (
-         <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+         <MuiThemeProvider>
             <FilmTree />
          </MuiThemeProvider>
       );

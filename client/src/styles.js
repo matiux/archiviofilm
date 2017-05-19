@@ -9,8 +9,22 @@ export default {
          display: 'block'
       }
    },
+   filters: {
+
+      padding: '20px 20px 0 20px',
+      width: '100%'
+   },
    searchBox: {
-      padding: '20px 20px 0 20px'
+      width: '90%',
+      float: 'left',
+   },
+   unseenCheckBox: {
+      float: 'left',
+      width: '10%'
+   },
+   unseenCheck: {
+      //border: '2px solid #FF9800',
+      margin: '0 auto',
    },
    item: {
       float: 'left'

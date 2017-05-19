@@ -8,9 +8,18 @@ const client = axios.create({
 
 export default client;
 
-export function fetchList() {
+export function fetchList(unseen) {
 
-   return client.get('/film');
+   const query = {
+      params: {}
+   };
+
+   if (unseen) {
+
+      query.params.unseen = true;
+   }
+
+   return client.get('/film', query);
 }
 
 export function updateFilm(filmId, props) {

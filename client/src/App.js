@@ -80,10 +80,12 @@ class FilmTree extends Component {
 
       super(props);
 
+      this.filterByName = debounce(1000, this.filterByName);
+
       this.state = {
          films: {},
          unseen: false,
-         filter: '',
+         filter: null,
       };
    }
 
@@ -102,7 +104,7 @@ class FilmTree extends Component {
 
    fetchData() {
 
-      fetchList(this.state.unseen)
+      fetchList(this.state.unseen, this.state.filter)
 
          .then((response) => {
 
@@ -186,17 +188,18 @@ class FilmTree extends Component {
       this.setState({ unseen: check });
    }
 
-   filterByName = (event) => {
+   debounceFilterByName = (e) => {
 
-      event.persist();
+      this.filterByName(e.target.value);
+   }
 
-      debounce(500, () => {
+   filterByName = (filter) => {
 
-         console.log('value :: ', event.target.value);
-        
-         // call ajax
-      })()
+      var f = filter.trim(filter);
 
+      this.setState({ filter: f ? f : null });
+
+      this.fetchData()
    }
 
    render() {
@@ -213,7 +216,7 @@ class FilmTree extends Component {
                         type="text"
                         className="form-control"
                         placeholder="Search the tree..."
-                        onKeyUp={this.filterByName}
+                        onKeyUp={this.debounceFilterByName}
                      />
                   </div>
                </div>

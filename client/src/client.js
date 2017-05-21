@@ -8,7 +8,7 @@ const client = axios.create({
 
 export default client;
 
-export function fetchList(unseen) {
+export function fetchList(unseen, filter) {
 
    const query = {
       params: {}
@@ -17,6 +17,11 @@ export function fetchList(unseen) {
    if (unseen) {
 
       query.params.unseen = true;
+   }
+
+   if (filter) {
+
+      query.params.filters = filter;
    }
 
    return client.get('/film', query);

@@ -7,6 +7,7 @@ import { Toggle, Checkbox } from 'material-ui'
 import { updateFilm, fetchList } from "./client";
 import { Treebeard, decorators } from 'react-treebeard';
 import styles from './styles';
+import { debounce } from 'throttle-debounce';
 
 function foo(list, search) {
 
@@ -35,7 +36,7 @@ function foo(list, search) {
 decorators.Toggle = () => (<span />);
 decorators.Header = (props) => {
 
-   const style = props.style;
+   const style = props.style.header;
    const iconType = props.node.children ? 'folder' : 'file-text';
    const iconClass = `fa fa-${iconType}`;
    const iconStyle = { marginRight: '5px' };
@@ -46,14 +47,12 @@ decorators.Header = (props) => {
       path: props.node.path
    };
 
-   //var styleBase = Object.clone(style.base)
-
-   //var s = props.node.children ? Object.assign(style.base, {backgroundColor: '#b3f442'}) : style.base;
+   //console.log(style)
 
    return (
-      <div style={iconType === 'folder' ? props.style.baseTitle : props.style.base}>
-         <div style={style.title}>
-            <div style={styles.item}>
+      <div className="bar" style={iconType === 'folder' ? style.baseTitle : style.base}>
+         <div className="baz" style={style.title}>
+            <div className="boo" style={styles.item}>
                <i className={iconClass} style={iconStyle} />
                {props.node.name}
             </div>
@@ -63,7 +62,17 @@ decorators.Header = (props) => {
    );
 };
 
-decorators.Container = (props) => (<div><decorators.Toggle {...props} /><decorators.Header {...props} /></div>);
+decorators.Container = (props) => {
+
+   return (
+
+      <div className={props.node.children ? "folderElement" : "childrenElement"} style={props.style.link} onClick={props.onClick}>
+         <decorators.Toggle className="ecc" {...props} />
+         <decorators.Header className="laa" {...props} />
+      </div>
+
+   );
+}
 
 class FilmTree extends Component {
 
@@ -71,9 +80,12 @@ class FilmTree extends Component {
 
       super(props);
 
+      this.filterByName = debounce(1000, this.filterByName);
+
       this.state = {
          films: {},
          unseen: false,
+         filter: null,
       };
    }
 
@@ -85,14 +97,14 @@ class FilmTree extends Component {
       }
    }
 
-   componentDidMount() {
+   componentWillMount() {
 
       this.fetchData()
    }
 
    fetchData() {
 
-      fetchList(this.state.unseen)
+      fetchList(this.state.unseen, this.state.filter)
 
          .then((response) => {
 
@@ -138,7 +150,7 @@ class FilmTree extends Component {
 
             this.setState({ films: hierarchy })
 
-            console.log(this.state);
+            //console.log(this.state);
 
             // this.setState((prevState, props) => {
 
@@ -176,6 +188,20 @@ class FilmTree extends Component {
       this.setState({ unseen: check });
    }
 
+   debounceFilterByName = (e) => {
+
+      this.filterByName(e.target.value);
+   }
+
+   filterByName = (filter) => {
+
+      var f = filter.trim(filter);
+
+      this.setState({ filter: f ? f : null });
+
+      this.fetchData()
+   }
+
    render() {
 
       return (
@@ -186,10 +212,11 @@ class FilmTree extends Component {
                      <span className="input-group-addon">
                         <i className="fa fa-search"></i>
                      </span>
-                     <input type="text"
+                     <input
+                        type="text"
                         className="form-control"
                         placeholder="Search the tree..."
-                        //onKeyUp={this.onFilterMouseUp.bind(this)}
+                        onKeyUp={this.debounceFilterByName}
                      />
                   </div>
                </div>
@@ -199,7 +226,8 @@ class FilmTree extends Component {
                      onCheck={this.toggleUnseen}
                      labelPosition="left"
                      label="Unseen"
-                     style={styles.unseenCheck}
+                     //labelStyle={{ width: 'auto' }}
+                     //style={styles.unseenCheck}
                      defaultChecked={this.state.unseen}
                   //labelStyle={{color: "black"}}
                   //inputStyle={{color: "black"}}

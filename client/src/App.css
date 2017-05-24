@@ -22,3 +22,33 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+body,
+html {
+   font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
+   margin: 0;
+   padding: 0;
+   font-family: sans-serif;
+}
+
+* {
+   box-sizing: border-box;
+}
+
+h1 {
+   padding: 0 20px;
+}
+#root {
+   max-width: 900px;
+   margin: 0 auto;
+   background-color: #f4cd41;
+}
+
+.folderElement {
+   background-color: #9df441;
+}
+
+.childrenElement {
+
+   background-color: #d6f441;
+}

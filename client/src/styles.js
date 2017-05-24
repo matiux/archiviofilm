@@ -15,15 +15,15 @@ export default {
       width: '100%'
    },
    searchBox: {
-      width: '90%',
+      width: '80%',
       float: 'left',
+      marginRight: '30px'
    },
    unseenCheckBox: {
       float: 'left',
       width: '10%'
    },
    unseenCheck: {
-      //border: '2px solid #FF9800',
       margin: '0 auto',
    },
    item: {
@@ -40,23 +40,23 @@ export default {
             backgroundColor: '',
             margin: 0,
             padding: 0,
-            color: '#9DA5AB',
+            color: '#757b7f',
             fontFamily: 'lucida grande ,tahoma,verdana,arial,sans-serif',
             fontSize: '14px'
          },
          node: {
             base: {
-               position: 'relative',
-               borderWidth: '1px',
-               border: '1px black solid',
-               margin: '5px 0px 5px 0px',
-               padding: '4px',
+               //position: 'relative',
+               //margin: '5px 0px 5px 0px',
+               //padding: '4px',
             },
             link: {
                cursor: 'pointer',
                position: 'relative',
-               padding: '0px 5px',
+               padding: '4px',
                display: 'block',
+               margin: '5px 0px 5px 0px',
+               borderRadius: '5px',
 
             },
             activeLink: {
@@ -81,7 +81,7 @@ export default {
                height: 14,
                width: 14,
                arrow: {
-                  fill: '#9DA5AB',
+                  fill: '#757b7f',
                   strokeWidth: 0
                }
             },
@@ -89,13 +89,13 @@ export default {
                base: {
                   display: 'inline-block',
                   verticalAlign: 'top',
-                  color: '#9DA5AB',
+                  color: '#757b7f',
                   width: '100%'
                },
                baseTitle: {
                   display: 'inline-block',
                   verticalAlign: 'top',
-                  color: '#9DA5AB',
+                  color: '#757b7f',
                   width: '100%',
                   fontWeight: 'bold',
                },

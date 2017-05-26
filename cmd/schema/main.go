@@ -13,7 +13,7 @@ func main() {
 	db, err := gorm.Open("mysql", "root:281285@/archivio_film?charset=utf8&parseTime=True&loc=Local")
 
 	if err != nil {
-		fmt.Println("Errore DB" + err.Error())
+		fmt.Println("Errore DB: " + err.Error())
 	}
 
 	db.AutoMigrate(&model.Film{})

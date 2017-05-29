@@ -29,9 +29,12 @@ export default {
    item: {
       float: 'left'
    },
-   toggle: {
-      width: 'auto',
-      float: 'right'
+   switch: {
+      root: {
+         width: '50px',
+         float: 'right',
+         backgroundColor: 'red',
+      }
    },
    treeStyle: {
       tree: {

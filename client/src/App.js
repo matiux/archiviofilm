@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { Toggle, Checkbox } from 'material-ui'
-// import Visibility from 'material-ui/svg-icons/action/visibility';
-// import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
+import { LabelCheckbox } from 'material-ui/Checkbox'
+import Switch from './CustomSwitch'
 // import client, { updateFilm, fetchList } from "./client";
 import { updateFilm, fetchList } from "./client";
 import { Treebeard, decorators } from 'react-treebeard';
@@ -97,7 +96,7 @@ class FilmTree extends Component {
       }
    }
 
-   componentWillMount() {
+   componentDidMount() {
 
       this.fetchData()
    }
@@ -221,18 +220,10 @@ class FilmTree extends Component {
                   </div>
                </div>
                <div style={styles.unseenCheckBox}>
-
-                  <Checkbox
-                     onCheck={this.toggleUnseen}
-                     labelPosition="left"
+                  <LabelCheckbox
+                     onChange={this.toggleUnseen}
                      label="Unseen"
-                     //labelStyle={{ width: 'auto' }}
-                     //style={styles.unseenCheck}
-                     defaultChecked={this.state.unseen}
-                  //labelStyle={{color: "black"}}
-                  //inputStyle={{color: "black"}}
-                  //checkedIcon={<Visibility />}
-                  //uncheckedIcon={<VisibilityOff />}
+                     checked={this.state.unseen}
                   />
 
                </div>
@@ -275,11 +266,9 @@ class FilmSeenStatusToggle extends Component {
    }
 
    render() {
-
       return (
-
-         <Toggle onToggle={this.changeSeenStatus} defaultToggled={this.state.seen} style={styles.toggle} />
-
+         <Switch onChange={this.changeSeenStatus} {...this.state} classNane={styles.switch.root}>
+         </Switch>
       );
    }
 }

@@ -1,7 +1,9 @@
 import axios from "axios";
 
+var url = 'development' === process.env.NODE_ENV ? 'http://localhost:8080' : 'http://www.arfi.com:8080';
+
 const client = axios.create({
-   baseURL: 'http://localhost:8080/api/v1',
+   baseURL: url + '/api/v1',
    timeout: 1000,
    //responseType: 'json'
 });
